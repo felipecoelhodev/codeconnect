@@ -1,6 +1,6 @@
 # CodeConnect
 
-O projeto **CodeConnect** foi construido para praticar SPA(Single Page Application) com React router. A ideia da aplicação é simular uma rede social para desenvolvedores, permitindo compartilhamento de conhecimento, networking e fortalecimento da comunidade tech. Pretende-se adicionar funcionalidades como permitit que usuários publiquem conteúdos, interajam com posts de colegas e gerenciem seus perfis em um ambiente otimizado para o ecossistema de programação.
+O projeto **CodeConnect** foi codado para praticar SPA(Single Page Application) com React router. A ideia da aplicação é simular uma rede social para desenvolvedores, permitindo compartilhamento de conhecimento, networking e fortalecimento da comunidade tech. Pretende-se adicionar funcionalidades como permitir que usuários publiquem conteúdos, interajam com posts de colegas e gerenciem seus perfis em um ambiente otimizado para o ecossistema de programação.
 
 ## Funcionalidades Aplicadas / Futuramente aplicadas
 
