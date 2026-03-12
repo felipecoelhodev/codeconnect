@@ -1,9 +1,12 @@
+import { Outlet } from "react-router";
 import styles from "./auth.module.css";
 
-export const AuthLayout = ({ children }) => {
+export const AuthLayout = () => {
   return (
     <div className={styles.container}>
-      <div className={styles.card}>{children}</div>
+      <div className={styles.card}>
+        <Outlet />
+      </div>
     </div>
   );
 };
