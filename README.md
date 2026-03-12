@@ -27,3 +27,21 @@ O projeto segue uma arquitetura baseada em componentes reutilizáveis:
 - `layouts/`: Estruturas de página (AppLayout para a rede e AuthLayout para login/cadastro).
 - `hooks/`: Lógica de negócio e estado global.
 - `assets/`: Imagens e recursos estáticos.
+
+## Como acessar ao projeto
+
+Pré-requisitos: Antes de começar, certifique-se de que tem o Git e o Node.js instalados.
+
+Instalação e Execução
+1. Clonar o repositório
+```
+git clone [URL_DO_REPOSITORIO]
+```
+2. Instalar as dependências
+```
+npm i
+```
+3. Iniciar o ambiente de desenvolvimento
+```
+npm run dev
+```
