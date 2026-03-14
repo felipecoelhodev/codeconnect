@@ -7,8 +7,8 @@ export const Feed = () => {
 
   useEffect(() => {
     fetch("http://localhost:3000/blog-posts")
-      .then((reponse) => {
-        return reponse.json();
+      .then((response) => {
+        return response.json();
       })
       .then((data) => setPosts(data));
   }, []);
