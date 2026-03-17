@@ -27,8 +27,33 @@ O **Code Connect** é uma plataforma moderna de compartilhamento de conteúdo vo
    npm install
    ```
 
-2. Certifique-se de que a API está rodando em `http://localhost:3000` (conforme configurado em `api/index.js`).
-3. Inicie o servidor de desenvolvimento:
+2. Certifique-se de que a API está rodando em `http://localhost:3000` (conforme configurado em `api/index.js`), para isso crie um outro projeto (ele será seu backend) e siga os passos:
+    ```bash
+   Clone o repositório deste link : "https://github.com/felipecoelhodev/codeconnectbackend" 
+    ```
+    ```bash
+   Instale as dependências: "npm install"
+    ```
+    ```bash
+   Configure as variáveis de ambiente, para isso crie um arquivo .env e coloque:
+   DATABASE_URL="file:./dev.db"
+   JWT_SECRET="your-secret-key-here"
+   ```
+    ```bash
+   Execute as migrações e seeds:
+   # Gera o banco de dados SQLite e aplica as migrações
+   "npx prisma migrate dev"
+   # Popula o banco com dados iniciais (usuários e posts de exemplo)
+   "npx prisma db seed"
+    ```
+    ```bash
+   Por fim execute a API, use 1 dos 2:
+   Modo desenvolvimento (com hot-reload): "npm run start:dev" (recomendado)
+   Modo produção: "npm run build" "npm run start:prod"
+   A API estará disponível em: http://localhost:3000
+    ```
+   
+4.  Com o Backend, agora volte ao projeto e inicie o servidor de desenvolvimento executando o comando abaixo e abra o link gerado:
    ```bash
    npm run dev
    ```
