@@ -1,11 +1,18 @@
-import { Link as RouterLink } from "react-router";
+"use client";
+
+import NextLink from "next/link";
 import styles from "./link.module.css";
 
-export const Link = ({ children, href, ...props }) => {
-  const className = props.className || "";
+export const Link = ({ href, children, variant = "default", ...props }) => {
+  const variantClass = styles[variant] || styles.default;
+
   return (
-    <RouterLink to={href} {...props} className={`${styles.link} ${className}`}>
+    <NextLink
+      href={href}
+      className={`${styles.link} ${variantClass}`}
+      {...props}
+    >
       {children}
-    </RouterLink>
+    </NextLink>
   );
 };

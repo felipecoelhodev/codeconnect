@@ -1,49 +1,44 @@
+import Image from "next/image";
+import { Avatar } from "../Avatar";
 import styles from "./cardpost.module.css";
+import Link from "next/link";
 
-import { Author } from "../Author";
+import { incrementThumbsUp, postComment } from "../../actions";
 import { ThumbsUpButton } from "./ThumbsUpButton";
 import { ModalComment } from "../ModalComment";
-import { Link } from "react-router";
-import { useAuth } from "../../hooks/useAuth";
-import { usePostInteractions } from "../../hooks/usePostInteractions";
 
-export const CardPost = ({ post }) => {
-  const { isAuthenticated } = useAuth();
-  const { likes, comments, handleNewComment, handleLikeButton } =
-    usePostInteractions(post);
-
-  const onLikeClick = () => {
-    handleLikeButton(post.id);
-  };
+export const CardPost = ({ post, highlight }) => {
+  const submitThumbsUp = incrementThumbsUp.bind(null, post);
+  const submitComment = postComment.bind(null, post);
 
   return (
-    <article className={styles.card}>
+    <article className={styles.card} style={{ width: highlight ? 993 : 486 }}>
       <header className={styles.header}>
-        <figure className={styles.figure}>
-          <img src={post.cover} alt={`Capa do post de titulo: ${post.title}`} />
+        <figure style={{ height: highlight ? 300 : 133 }}>
+          <Image
+            src={post.cover}
+            fill
+            alt={`Capa do post de titulo: ${post.title}`}
+          />
         </figure>
       </header>
       <section className={styles.body}>
         <h2>{post.title}</h2>
         <p>{post.body}</p>
-        <Link to={`/blog-post/${post.slug}`}>Ver detalhes</Link>
+        <Link href={`/posts/${post.slug}`}>Ver detalhes</Link>
       </section>
       <footer className={styles.footer}>
         <div className={styles.actions}>
-          <div className={styles.action}>
-            <ThumbsUpButton
-              loading={false}
-              onClick={onLikeClick}
-              disabled={!isAuthenticated}
-            />
-            <p>{likes}</p>
-          </div>
-          <div className={styles.action}>
-            <ModalComment onSuccess={handleNewComment} postId={post.id} />
-            <p>{comments.length}</p>
+          <form action={submitThumbsUp}>
+            <ThumbsUpButton />
+            <p>{post.likes}</p>
+          </form>
+          <div>
+            <ModalComment action={submitComment} />
+            <p>{post.comments.length}</p>
           </div>
         </div>
-        <Author author={post.author} />
+        <Avatar imageSrc={post.author.avatar} name={post.author.username} />
       </footer>
     </article>
   );

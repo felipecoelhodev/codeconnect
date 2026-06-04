@@ -1,4 +1,7 @@
+"use client";
+
 import { forwardRef, useImperativeHandle, useRef } from "react";
+
 import styles from "./modal.module.css";
 
 export const Modal = forwardRef(({ children }, ref) => {

@@ -1,11 +1,16 @@
+"use client";
+
 import { IconButton } from "../IconButton";
 import { Spinner } from "../Spinner";
-import { IconThumbsUp } from "../icons/IconThumbsUp";
+import { ThumbsUp } from "../icons/ThumbsUp";
 
-export const ThumbsUpButton = ({ loading, ...props }) => {
+import { useFormStatus } from "react-dom";
+
+export const ThumbsUpButton = () => {
+  const { pending } = useFormStatus();
   return (
-    <IconButton disabled={loading} {...props}>
-      {loading ? <Spinner /> : <IconThumbsUp />}
+    <IconButton disabled={pending}>
+      {pending ? <Spinner /> : <ThumbsUp />}
     </IconButton>
   );
 };

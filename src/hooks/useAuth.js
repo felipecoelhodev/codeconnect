@@ -1,69 +1,87 @@
+"use client";
+
 import { useState, useEffect } from "react";
-import { http } from "../api";
+import { useRouter } from "next/navigation";
+import { createClient } from "../utils/supabase/client";
 
 export const useAuth = () => {
   const [user, setUser] = useState(null);
-  const [isLoading, setIsLoading] = useState(true);
+  const [loading, setLoading] = useState(true);
+  const supabase = createClient();
 
   useEffect(() => {
-    const storedUser = localStorage.getItem("auth_user");
-    if (storedUser) {
+    // Verificar se há usuário logado
+    const checkUser = async () => {
       try {
-        setUser(JSON.parse(storedUser));
+        // ✅ OK usar getSession() em Client Components
+        // O middleware já garante que o token está válido
+        const {
+          data: { session },
+          error,
+        } = await supabase.auth.getSession();
+
+        if (error) {
+          setUser(null);
+        } else if (session?.user) {
+          setUser(session.user);
+        } else {
+          setUser(null);
+        }
       } catch (error) {
-        console.error("Erro ao carregar usuário do localStorage:", error);
-        localStorage.removeItem("auth_user");
+        console.error("Erro ao verificar usuário:", error);
+        setUser(null);
+      } finally {
+        setLoading(false);
       }
-    }
-    setIsLoading(false);
-  }, []);
+    };
 
-  const register = async (name, email, password) => {
+    checkUser();
+
+    // Escutar mudanças de autenticação
+    const {
+      data: { subscription },
+    } = supabase.auth.onAuthStateChange((event, session) => {
+      if (event === "SIGNED_IN" && session?.user) {
+        setUser(session.user);
+        setLoading(false);
+      } else if (event === "SIGNED_OUT") {
+        setUser(null);
+        setLoading(false);
+      } else if (event === "TOKEN_REFRESHED") {
+        if (session?.user) {
+          setUser(session.user);
+        }
+      }
+    });
+
+    return () => subscription.unsubscribe();
+  }, [supabase]);
+
+  const signOut = () => {
     try {
-      await http.post("auth/register", {
-        name,
-        email,
-        password,
+      // Fire-and-forget: não esperamos pelo signOut
+      supabase.auth.signOut().catch((error) => {
+        console.error("❌ Erro ao fazer logout:", error);
       });
 
-      return { success: true };
+      console.log("Logout OK");
+
+      setUser(null);
+
+      // Forçar redirecionamento usando window.location para garantir limpeza total
+      window.location.href = "/login";
     } catch (error) {
-      return { success: false, error: error.message };
+      console.error("❌ Erro inesperado no logout:", error);
+      // Mesmo com erro, tenta redirecionar
+      setUser(null);
+      window.location.href = "/login";
     }
   };
-
-  const login = async (email, password) => {
-    try {
-      const response = await http.post("auth/login", {
-        email,
-        password,
-      });
-
-      const data = response.data;
-      setUser(data.user);
-      localStorage.setItem("auth_user", JSON.stringify(data.user));
-      localStorage.setItem("access_token", data.access_token);
-
-      return { success: true, user };
-    } catch (error) {
-      return { success: false, error: error.message };
-    }
-  };
-
-  const logout = () => {
-    setUser(null);
-    localStorage.removeItem("auth_user");
-    localStorage.removeItem("access_token");
-  };
-
-  const isAuthenticated = !!user;
 
   return {
     user,
-    isLoading,
-    isAuthenticated,
-    register,
-    login,
-    logout,
+    loading,
+    signOut,
+    isAuthenticated: !!user,
   };
 };

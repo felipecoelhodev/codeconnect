@@ -1,92 +1,51 @@
-import { useRef, useState } from "react";
+"use client";
+
+import { useRef } from "react";
 import { IconButton } from "../IconButton";
 import { Modal } from "../Modal";
+import { Chat } from "../icons/Chat";
 import { Textarea } from "../Textarea";
-import { Subheading } from "../Subheading";
-import { IconChat } from "../icons/IconChat";
-import { IconArrowFoward } from "../icons/IconArrowFoward";
-import { Spinner } from "../Spinner";
+
 import styles from "./commentmodal.module.css";
-import { Button } from "../Button";
-import { http } from "../../api";
-import { useAuth } from "../../hooks/useAuth";
+import { SubmitButton } from "../SubmitButton";
+import { Subheading } from "../Subheading";
 
-export const ModalComment = ({
-  isEditing,
-  onSuccess,
-  postId,
-  defaultValue = "",
-  commentId,
-}) => {
+export const ModalComment = ({ action, onCommentAdded }) => {
   const modalRef = useRef(null);
-  const [loading, setLoading] = useState(false);
-  const { isAuthenticated } = useAuth();
 
-  const onSubmit = async (formData) => {
-    const text = formData.get("text");
-    if (!text.trim()) return;
-
+  const handleSubmit = async (formData) => {
     try {
-      setLoading(true);
-      if (isEditing) {
-        http
-          .patch(`/comments/${commentId}`, {
-            text,
-          })
-          .then((response) => {
-            modalRef.current.closeModal();
-            onSuccess(response.data);
-            setLoading(false);
-          });
-      } else {
-        http
-          .post(`/comments/post/${postId}`, {
-            text,
-          })
-          .then((response) => {
-            modalRef.current.closeModal();
-            onSuccess(response.data);
-            setLoading(false);
-          });
+      await action(formData);
+
+      modalRef.current.closeModal();
+
+      // ✅ Notificar componente pai para atualizar comentários
+      if (onCommentAdded) {
+        await onCommentAdded();
       }
     } catch (error) {
-      console.error("Erro ao criar/atualizar comentário:", error);
+      console.error("❌ ModalComment: erro no handleSubmit:", error);
     }
   };
+
   return (
     <>
       <Modal ref={modalRef}>
-        <form action={onSubmit}>
-          <Subheading>
-            {isEditing
-              ? "Editar comentário:"
-              : "Deixe seu comentário sobre o post:"}
-          </Subheading>
+        <form action={handleSubmit}>
+          <Subheading>Deixe seu comentário sobre o post:</Subheading>
           <Textarea
             required
             rows={8}
             name="text"
             placeholder="Digite aqui..."
-            defaultValue={defaultValue}
           />
           <div className={styles.footer}>
-            <Button disabled={loading} type="submit">
-              {loading ? (
-                <Spinner />
-              ) : (
-                <>
-                  {isEditing ? "Atualizar" : "Comentar"} <IconArrowFoward />
-                </>
-              )}
-            </Button>
+            <SubmitButton>Comentar</SubmitButton>
           </div>
         </form>
       </Modal>
-      <IconButton
-        onClick={() => modalRef.current.openModal()}
-        disabled={!isAuthenticated}
-      >
-        <IconChat fill={isEditing ? "#000" : "#888888"} />
+      <IconButton onClick={() => modalRef.current.openModal()}>
+        <Chat />
       </IconButton>
     </>
   );

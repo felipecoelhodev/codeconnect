@@ -1,14 +1,19 @@
 import { Comment } from "../Comment";
+import { ReplyModal } from "../ModalReply";
+import { Replies } from "../Replies";
+
 import styles from "./commentlist.module.css";
 
-export const CommentList = ({ comments, onDelete }) => {
+export const CommentList = ({ comments, onReplyAdded }) => {
   return (
     <section className={styles.comments}>
-      <h2 className={styles.heading}>Comentários</h2>
+      <h2>Comentários</h2>
       <ul>
         {comments.map((comment) => (
           <li key={comment.id}>
-            <Comment comment={comment} key={comment.id} onDelete={onDelete} />
+            <Comment comment={comment} />
+            <ReplyModal comment={comment} onReplyAdded={onReplyAdded} />
+            <Replies comment={comment} onReplyAdded={onReplyAdded} />
           </li>
         ))}
       </ul>

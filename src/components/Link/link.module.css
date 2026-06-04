@@ -1,7 +1,29 @@
 .link {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  gap: 8px;
-  margin: 12px 0;
+  text-decoration: none;
+  transition: color 0.2s ease;
+}
+
+.default {
+  color: #667eea;
+}
+
+.default:hover {
+  color: #5a67d8;
+}
+
+.light {
+  color: #718096;
+}
+
+.light:hover {
+  color: #4a5568;
+}
+
+.highlight {
+  color: #667eea;
+  font-weight: 600;
+}
+
+.highlight:hover {
+  color: #5a67d8;
 }

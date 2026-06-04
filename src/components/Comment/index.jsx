@@ -1,37 +1,18 @@
+import Image from "next/image";
 import styles from "./comment.module.css";
-import { Avatar } from "../Avatar";
-import { ModalComment } from "../ModalComment";
-import { useAuth } from "../../hooks/useAuth";
-import { useState } from "react";
-import { IconButton } from "../IconButton";
 
-export const Comment = ({ comment, onDelete }) => {
-  const [text, setText] = useState(comment.text);
-  const { user } = useAuth();
-
-  const isOwner = user && user.id == comment.author.id;
-
-  const handleEdit = (newComment) => {
-    setText(newComment.text);
-  };
-
+export const Comment = ({ comment }) => {
   return (
     <div className={styles.comment}>
-      <Avatar author={comment.author} />
+      <Image
+        src={comment.author.avatar}
+        width={32}
+        height={32}
+        alt={`Avatar do(a) ${comment.author.name}`}
+      />
       <strong>@{comment.author.name}</strong>
-      <p>{text}</p>
-      <div className={styles.divider} />
-      {isOwner && (
-        <ModalComment
-          isEditing
-          onSuccess={handleEdit}
-          defaultValue={text}
-          commentId={comment.id}
-        />
-      )}
-      {isOwner && (
-        <IconButton onClick={() => onDelete(comment.id)}>excluir</IconButton>
-      )}
+      <p>{comment.text}</p>
+      <time>{new Date(comment.createdAt).toLocaleString()}</time>
     </div>
   );
 };
