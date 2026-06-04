@@ -18,7 +18,7 @@ const supabase = createClient(supabaseUrl, supabaseKey);
 
 async function main() {
   console.log("🌱 Iniciando seed do Supabase...");
-
+  // Link fornecido pela instrutora para usar livremente em projetos livremente.
   const author = {
     name: "Ana Beatriz",
     username: "anabeatriz_dev",
@@ -55,6 +55,7 @@ async function main() {
   }
 
   const posts = [
+    // Link fornecido pela instrutora para usar livremente em projetos livremente.
     {
       cover:
         "https://raw.githubusercontent.com/gss-patricia/code-connect-assets/main/posts/introducao-ao-react.png",
