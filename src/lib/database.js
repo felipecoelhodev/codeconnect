@@ -218,7 +218,7 @@ export class DatabaseService {
         return existingUser;
       }
 
-      // Se não existe, criar. Link fornecido pela instrutora para usar livremente em projetos livremente.
+      // Se não existe, criar
       const { data: newUser, error: createError } = await db
         .from("User")
         .insert({
