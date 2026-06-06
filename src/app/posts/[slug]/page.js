@@ -53,7 +53,7 @@ const PagePost = () => {
     if (slug && user) {
       loadPost();
     }
-  }, []);
+  }, [slug, user]);
 
   // Handler para quando um comentário é adicionado
   const handleCommentAdded = async () => {
@@ -110,11 +110,11 @@ const PagePost = () => {
   }
 
   if (loading) {
-    return <div>Carregando...</div>;
+    return <div className={styles.bodyMessage}>Carregando...</div>;
   }
 
   if (!post) {
-    return <div>Post não encontrado</div>;
+    return <div className={styles.bodyMessage}>Post não encontrado</div>;
   }
 
   return (
